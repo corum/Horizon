@@ -75,6 +75,7 @@ Type TSceneWindow Extends TScene
 		win.title = "Title bar text is aligned at center."
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
 		win.SetStyle(TGuiWidgetWindow.STYLE_FULL)
+		win.clickToFront = False
 		
 		win2 = New TGuiWidgetWindow
 		win2.rect.x = 380
@@ -83,12 +84,14 @@ Type TSceneWindow Extends TScene
 		win2.rect.h = 220
 		win2.title = "Title bar text is right aligned -->"
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
-		win2.SetStyle(TGuiWidgetWindow.STYLE_FULL, TGuiWidgetWindow.TITLE_RIGHT)
+		win2.SetStyle(TGuiWidgetWindow.STYLE_CLOSE|TGuiWidgetWindow.STYLE_DRAG|TGuiWidgetWindow.STYLE_RESIZE, TGuiWidgetWindow.TITLE_RIGHT)
+		'win2.clickToFront = True
 		
 		win3 = TGuiWidgetWindow.Create(200, 340, 500, 120, TGuiWidgetWindow.STYLE_FULL)
 		win3.title = "Title bar text is on left and automatically clipped."
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
-		win3.SetStyle(TGuiWidgetWindow.STYLE_FULL, TGuiWidgetWindow.TITLE_LEFT)
+		win3.SetStyle(TGuiWidgetWindow.STYLE_FULL,TGuiWidgetWindow.TITLE_LEFT)
+		win3.showStatusBar = False
 		
 		bg = LoadImage("data/bg.jpg")
 	End Method
