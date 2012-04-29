@@ -46,7 +46,11 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 	End Method
 	
 	Method Render()
-		SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
+		If parent
+				SetViewport(TGuiWidgetFrame(parent).GetInnerWindowX(), TGuiWidgetFrame(parent).GetInnerWindowY(), TGuiWidgetFrame(parent).GetInnerWidth(), TGuiWidgetFrame(parent).GetInnerHeight())
+			Else
+				SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
+		EndIf
 		If (TGuiSystem.activeElement = Self)
 			SetColor($AA,$AA,$AA)
 		Else

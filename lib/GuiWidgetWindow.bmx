@@ -1,12 +1,10 @@
 
 SuperStrict
 
-'Import "GuiWidget.bmx"
 Import "GuiWidgetFrame.bmx"
 Import "GuiWidgetImageButton.bmx"
 
 Type TGuiWidgetWindow Extends TGuiWidgetFrame
-	Global topWindow:TGuiWidgetWindow
 	
 	Field buttons:Int = 0
 	Field minW:Int = 80
@@ -20,7 +18,7 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 	Const TITLE_RIGHT:Int = 2
 	Field titleAlign:Int
 	
-	Field clickToFront:Byte = true
+	Field clickToFront:Byte = True
 	Field showStatusBar:Byte = True
 	
 	Field btnClose:TGuiWidgetWindowButton
@@ -34,8 +32,9 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 	Const STYLE_FOLD:Int		= %00001000
 	Const STYLE_ZORDER:Int	= %00010000
 	Const STYLE_FULL:Int		= STYLE_CLOSE|STYLE_FOLD|STYLE_DRAG|STYLE_RESIZE|STYLE_ZORDER
+	Const STYLE_STD:Int		= STYLE_CLOSE|STYLE_FOLD|STYLE_DRAG|STYLE_RESIZE
 
-	Function Create : TGuiWidgetWindow(x:Int, y:Int, w:Int = 0, h:Int = 0,style:Int = STYLE_DRAG)
+	Function Create : TGuiWidgetWindow(x:Int, y:Int, w:Int = 0, h:Int = 0,style:Int = STYLE_STD)
 		Local instance : TGuiWidgetWindow = New TGuiWidgetWindow
 		instance.rect.x = x
 		instance.rect.y = y
@@ -46,12 +45,23 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 		Return instance
 	End Function
 	
-	'Method New()
-	'	style = STYLE_DRAG
-	'	InitWidget()
-	'End Method
+	Method AddChild(w:TGuiWidget)
+		If (w.parent) Then w.parent.RemoveChild(w)
+		ListAddLast(childs, w)
+		AutoRenderOff(w)
+		w.parent = Self
+		w.rect.x = GetInnerWindowX()
+		w.rect.y = GetInnerWindowY()
+	End Method
 	
-	Method SetStyle(winStyle:Int = STYLE_DRAG, align:Int = TITLE_CENTER )
+	Method AutoRenderOff(w:TGuiWidget)
+		If Not TGuiWidgetWindowButton(w) Then w.autoRender = False
+		For Local c:TGuiWidget = EachIn w.childs
+			AutoRenderOff(c)
+		Next
+	End Method
+	
+	Method SetStyle(winStyle:Int = STYLE_STD, align:Int = TITLE_CENTER )
 		style = winStyle
 		titleAlign = align
 		If (style & STYLE_CLOSE) And Not btnClose
@@ -80,12 +90,10 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 			AddChild(btnResize)
 			btnResize.rect.y = GetY() + GetH() - btnResize.rect.h - 1
 			btnResize.rect.x = GetX() + GetW() - btnResize.rect.w - 3
-			buttons :+ 1
 		EndIf
 	End Method
 	
 	Method ToFront()
-		DebugLog "This is TGuiWidgetWindow type..."
 		If clickToFront Then Super.ToFront()
 	End Method
 	
@@ -127,16 +135,26 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 			Else
 				SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight()+ImageHeight(resizeBottom)-1)
 			EndIf
-			SetOrigin(GetInnerWindowX(), GetInnerWindowY())
 			SetClsColor(230,230,230)
 			Cls
+			'Render widgets inside window's frame
+			For Local c : TGuiWidget = EachIn childs
+				RenderChilds(c)
+			Next
 			SetColor(255,255,255)
 			SetClsColor(0,0,0)
 			SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
 			SetOrigin(0,0)
 		EndIf
 	End Method
-
+	
+	Method RenderChilds(w:TGuiWidget)
+		w.Render()
+		For Local c : TGuiWidget = EachIn w.childs
+			RenderChilds(c)
+		Next
+	End Method
+	
 	Method GetW : Int()
 		Return rect.w
 	End Method
@@ -209,5 +227,6 @@ Type TGuiWidgetWindowButton Extends TGuiWidgetImageButton
 	End Function
 
 	Method ToFront()
+		If parent And TGuiWidgetWindow(parent).clickToFront Then Super.ToFront()
 	End Method
 End Type
