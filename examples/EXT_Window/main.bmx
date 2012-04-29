@@ -14,7 +14,7 @@ TGuiSystem.SKIN_PATH = "../../data/gui/default/"
 
 TApplication.SetName("Test")
 'TApplication.InitGraphics(DesktopWidth(), DesktopHeight(), DesktopDepth())
-TApplication.InitGraphics(900, 630)
+TApplication.InitGraphics(800, 600)
 TGuiSystem.Init()
 
 Local myApp:TApplication = TApplication.GetInstance()
@@ -29,6 +29,7 @@ Type TSceneWindow Extends TScene
 	Field bg:TImage
 	Field button:TGuiWidgetButton
 	Field text:TGuiWidgetTextbox
+	Field list:TGuiWidgetList
 	Field bgN:Int = 1
 	Field bold:Int
 	
@@ -95,8 +96,8 @@ Type TSceneWindow Extends TScene
 		win = New TGuiWidgetWindow
 		win.rect.x = 20
 		win.rect.y = 40
-		win.rect.w = 300
-		win.rect.h = 220
+		win.rect.w = 330
+		win.rect.h = 320
 		win.title = "Title bar text is aligned at center."
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
 		win.SetStyle(TGuiWidgetWindow.STYLE_STD)
@@ -113,18 +114,29 @@ Type TSceneWindow Extends TScene
 		text.rect.w = 300
 		text.rect.h = 80
 		text.text = "the quick brown fox jumps over the lazy dog the quick brown fox jumps over the lazy dog"
+		list = New TGuiWidgetList
+		win.AddChild(list)
+		list.rect.x :+ 2
+		list.rect.y :+ 130
+		list.rect.w = 300
+		list.rect.h = 80
+		list.AddEntry("Item 1")
+		list.AddEntry("Item 2")
+		list.AddEntry("Item 3")
+		list.AddEntry("Item 4")
+		list.AddEntry("Item 5")
 		
 		win2 = New TGuiWidgetWindow
 		win2.rect.x = 380
-		win2.rect.y = 40
+		win2.rect.y = 60
 		win2.rect.w = 400
-		win2.rect.h = 220
+		win2.rect.h = 320
 		win2.title = "Title bar text is right aligned -->"
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
 		win2.SetStyle(TGuiWidgetWindow.STYLE_STD, TGuiWidgetWindow.TITLE_RIGHT)
 		'win2.clickToFront = False
 		
-		win3 = TGuiWidgetWindow.Create(200, 340, 500, 120, TGuiWidgetWindow.STYLE_STD)
+		win3 = TGuiWidgetWindow.Create(100, 400, 560, 140, TGuiWidgetWindow.STYLE_STD)
 		win3.title = "Title bar text is on left and automatically clipped."
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
 		win3.SetStyle(,TGuiWidgetWindow.TITLE_LEFT)

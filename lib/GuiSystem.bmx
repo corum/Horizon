@@ -14,10 +14,53 @@ Type TGuiSystem
 	Global mouse : TInputControllerMouse
 
 	Global SKIN_PATH:String = "data/gui/default/"
-
+	
+	'---------------------------------------------------------------
+	' GUI Boundary System
+	'---------------------------------------------------------------
+	Global xBound:Int, yBound:Int, wBound:Int, hBound:Int
+	
+	Function SetBounds(x:Int, y:Int, w:Int , h:Int)
+	'DebugStop
+		xBound = x
+		yBound = y
+		hBound = h
+		wBound = w
+		SetViewport(xBound:Int, yBound:Int, wBound:Int, hBound:Int)
+	End Function
+	
+	Function GetXBound:Int()
+	'DebugStop
+		Return xBound
+	End Function
+	
+	Function GetYBound:Int()
+		Return yBound
+	End Function
+	
+	Function GetWBound:Int()
+		Return wBound
+	End Function
+	
+	Function GetHBound:Int()
+		Return hBound
+	End Function
+	
+	Function ResetBounds()
+	'DebugStop
+		xBound = 0
+		yBound = 0
+		wBound = GraphicsWidth()
+		hBound = GraphicsHeight()
+		SetViewport(xBound, yBound, wBound, hBound)
+		SetOrigin(0,0)
+	End Function
+	'---------------------------------------------------------------
+		
 	Function Init()
 		widgets = CreateList()
 		mouse = TInputControllerMouse.GetInstance()
+		ResetBounds()
 	End Function
 	
 	Function RenderAll(darkenBG:Byte = True)

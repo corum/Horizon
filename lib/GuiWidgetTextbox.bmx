@@ -5,6 +5,7 @@ Import BRL.Max2D
 Import BRL.PNGLoader
 Import "GuiWidgetFrame.bmx"
 Import "Color.bmx"
+Import "GuiUtilImage.bmx"
 
 Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 
@@ -117,7 +118,7 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 	End Method
 	
 	Method DrawTopBar()
-		TUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
+		TGuiUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
 	End Method
 	
 	Method GetInnerHeight : Int()
@@ -125,7 +126,7 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 	End Method
 	
 	Method DrawBottomBorder()
-		TUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
+		TGuiUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
 	End Method	
 
 	Method Update()

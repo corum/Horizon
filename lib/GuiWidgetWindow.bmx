@@ -50,12 +50,12 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 		ListAddLast(childs, w)
 		AutoRenderOff(w)
 		w.parent = Self
-		w.rect.x = GetInnerWindowX()
-		w.rect.y = GetInnerWindowY()
+		w.rect.x = GetInnerWindowX() + 2
+		w.rect.y = GetInnerWindowY() + 2
 	End Method
 	
 	Method AutoRenderOff(w:TGuiWidget)
-		If Not TGuiWidgetWindowButton(w) Then w.autoRender = False
+		If Not TGuiWidgetWindowButton(w) Then w.SetAutoRender(False) 'w.autoRender = False
 		For Local c:TGuiWidget = EachIn w.childs
 			AutoRenderOff(c)
 		Next
@@ -131,9 +131,10 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 			DrawRightBorder()
 			DrawLeftBorder()
 			If showStatusBar
-				SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
+				'SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
+				TGuiSystem.SetBounds(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
 			Else
-				SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight()+ImageHeight(resizeBottom)-1)
+				TGuiSystem.SetBounds(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight()+ImageHeight(resizeBottom)-1)
 			EndIf
 			SetClsColor(230,230,230)
 			Cls
@@ -143,8 +144,7 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 			Next
 			SetColor(255,255,255)
 			SetClsColor(0,0,0)
-			SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
-			SetOrigin(0,0)
+			TGuiSystem.ResetBounds()
 		EndIf
 	End Method
 	
@@ -165,7 +165,7 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 	
 	Method DrawTopBar()
 		TUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
-		Local offset:Int = (buttons-1)*24
+		Local offset:Int = (buttons)*24
 		SetViewport(GetX()+offset, GetY(), GetW()-offset-2, ImageHeight(topBar))
 		Select titleAlign
 			Case TITLE_CENTER
