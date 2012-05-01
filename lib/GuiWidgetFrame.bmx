@@ -1,7 +1,6 @@
 
 SuperStrict
 
-Import "UtilImage.bmx"
 Import "GuiUtilImage.bmx"
 Import "GuiWidget.bmx"
 

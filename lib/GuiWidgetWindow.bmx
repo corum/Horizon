@@ -131,10 +131,9 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 			DrawRightBorder()
 			DrawLeftBorder()
 			If showStatusBar
-				'SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
-				TGuiSystem.SetBounds(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
+				TGuiVP.Add(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
 			Else
-				TGuiSystem.SetBounds(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight()+ImageHeight(resizeBottom)-1)
+				TGuiVP.Add(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight()+ImageHeight(resizeBottom)-1)
 			EndIf
 			SetClsColor(230,230,230)
 			Cls
@@ -144,15 +143,17 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 			Next
 			SetColor(255,255,255)
 			SetClsColor(0,0,0)
-			TGuiSystem.ResetBounds()
+			TGuiVP.Pop()
 		EndIf
 	End Method
 	
 	Method RenderChilds(w:TGuiWidget)
+		TGuiVP.Add(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
 		w.Render()
 		For Local c : TGuiWidget = EachIn w.childs
 			RenderChilds(c)
 		Next
+		TGuiVP.Pop()
 	End Method
 	
 	Method GetW : Int()
@@ -164,9 +165,10 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 	End Method
 	
 	Method DrawTopBar()
-		TUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
+		TGuiUtilImage.DrawRepeated(topBar, GetX(), GetY(), rect.w, ImageHeight(topBar))		
 		Local offset:Int = (buttons)*24
-		SetViewport(GetX()+offset, GetY(), GetW()-offset-2, ImageHeight(topBar))
+		'SetViewport(GetX()+offset, GetY(), GetW()-offset-2, ImageHeight(topBar))
+		TGuiVP.Add(GetX()+offset, GetY(), GetW()-offset-2, ImageHeight(topBar))
 		Select titleAlign
 			Case TITLE_CENTER
 				DrawText (title, GetX()+offset+(GetW()-TextWidth(title)-offset)/2, GetY() + 6) 'Align Center
@@ -175,21 +177,24 @@ Type TGuiWidgetWindow Extends TGuiWidgetFrame
 			Case TITLE_LEFT
 				DrawText (title, GetX()+offset, GetY() + 6) 'Align Left
 		End Select
-		SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
-		SetOrigin(0,0)
+		'SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
+		TGuiVP.Pop()
+		'SetOrigin(0,0)
 	End Method
 
 	Method DrawBottomBorder()
 		If showStatusBar
-			TUtilImage.DrawRepeated(resizeBottom, GetX(), GetY() + rect.h - ImageHeight(resizeBottom) - ImageHeight(bottomBorder), rect.w, ImageHeight(resizeBottom))
+			TGuiUtilImage.DrawRepeated(resizeBottom, GetX(), GetY() + rect.h - ImageHeight(resizeBottom) - ImageHeight(bottomBorder), rect.w, ImageHeight(resizeBottom))
 			SetColor($CC,$CC,$CC)
-			SetViewport(GetX(), GetY() + rect.h - ImageHeight(resizeBottom), GetW()-2, ImageHeight(resizeBottom))
+			'SetViewport(GetX(), GetY() + rect.h - ImageHeight(resizeBottom), GetW()-2, ImageHeight(resizeBottom))
+			TGuiVP.Add(GetX(), GetY() + rect.h - ImageHeight(resizeBottom), GetW()-2, ImageHeight(resizeBottom))
 			DrawText (status, GetX() + ImageWidth(leftBorder), GetY() + rect.h - ImageHeight(resizeBottom))
 			SetColor($FF,$FF,$FF)
-			SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
-			SetOrigin(0,0)
+			'SetViewport(0,0,GraphicsWidth(), GraphicsHeight())
+			TGuiVP.Pop()
+			'SetOrigin(0,0)
 		EndIf
-		TUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
+		TGuiUtilImage.DrawRepeated(bottomBorder, GetX(), GetY() + rect.h - ImageHeight(bottomBorder), rect.w, ImageHeight(bottomBorder))		
 	End Method	
 
 	Method Update()

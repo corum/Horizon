@@ -19,34 +19,28 @@ Type TGuiUtilImage
 		If x < 0 Then w :+ x ; x = 0
 		If y < 0 Then h :+ y ; y = 0
 		
-		Local oldViewportX:Int, oldViewportY:Int, oldViewportW:Int, oldViewportH:Int
 		Local viewportX:Int, viewportY:Int, viewportW:Int, viewportH:Int
-		'GetViewport(oldViewportX, oldViewportY, oldViewportW, oldViewportH)
-		oldViewportX = TGuiSystem.GetXBound()
-		oldViewportY = TGuiSystem.GetYBound()
-		oldViewportW = TGuiSystem.GetWBound()
-		oldViewportH = TGuiSystem.GetHBound()
-		'DebugStop
-		If (x > oldViewportX) Then viewportX = x Else viewportX = oldViewportX
-		If (y > oldViewportY) Then viewportY = y Else viewportY = oldViewportY
-		If (oldViewportX + oldViewportW) > (viewportX + viewportW) Then viewportW = w Else viewportW = (viewportX + viewportW) - (oldViewportX + oldViewportW)
-		If (h < oldViewportH) Then viewportH = h Else viewportH = oldViewportH
 
-		Local difX:Int = (oldViewportX + oldViewportW) - (viewportX + viewportW)	
+		If (x > TGuiVP.vpX) Then viewportX = x Else viewportX = TGuiVP.vpX
+		If (y > TGuiVP.vpY) Then viewportY = y Else viewportY = TGuiVP.vpY
+		If (TGuiVP.vpX + TGuiVP.vpW) > (viewportX + viewportW) Then viewportW = w Else viewportW = (viewportX + viewportW) - (TGuiVP.vpX + TGuiVP.vpW)
+		If (h < TGuiVP.vpH) Then viewportH = h Else viewportH = TGuiVP.vpH
+
+		Local difX:Int = (TGuiVP.vpX + TGuiVP.vpW) - (viewportX + viewportW)	
 		Local x2:Int = viewportX + viewportW
-		Local oldX2:Int = oldViewportX + oldViewportW
+		Local oldX2:Int = TGuiVP.vpX + TGuiVP.vpW
 		If (difX < 0) Then viewportW :+ difX
 		
-		Local difY:Int = (oldViewportY + oldViewportH) - (viewportY + viewportH)	
+		Local difY:Int = (TGuiVP.vpY + TGuiVP.vpH) - (viewportY + viewportH)	
 		Local y2:Int = viewportY + viewportH
-		Local oldY2:Int = oldViewportY + oldViewportH
+		Local oldY2:Int = TGuiVP.vpY + TGuiVP.vpH
 		If (difY < 0) Then viewportH :+ difY	
 		
 		If x < 0 Then viewportW :+ x
 		If x < 0 Then viewportH :+ y
 		
-		SetViewport(viewportX, viewportY, viewportW, viewportH)
+		TGuiVP.Add(viewportX, viewportY, viewportW, viewportH)
 		TileImage IMG, X, Y, frame
-		SetViewport(oldViewportX, oldViewportY, oldViewportW, oldViewportH)
+		TGuiVP.Pop()
 	End Function
 End Type

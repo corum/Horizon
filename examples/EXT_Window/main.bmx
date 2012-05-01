@@ -30,6 +30,7 @@ Type TSceneWindow Extends TScene
 	Field button:TGuiWidgetButton
 	Field text:TGuiWidgetTextbox
 	Field list:TGuiWidgetList
+	Field frame:TGuiWidgetFrame
 	Field bgN:Int = 1
 	Field bold:Int
 	
@@ -135,10 +136,15 @@ Type TSceneWindow Extends TScene
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
 		win2.SetStyle(TGuiWidgetWindow.STYLE_STD, TGuiWidgetWindow.TITLE_RIGHT)
 		'win2.clickToFront = False
+		frame = New TGuiWidgetFrame
+		frame.rect.w = 200
+		frame.rect.h = 160
+		win2.AddChild(frame)
 		
 		win3 = TGuiWidgetWindow.Create(100, 400, 560, 140, TGuiWidgetWindow.STYLE_STD)
 		win3.title = "Title bar text is on left and automatically clipped."
 		'IMPORTANT: if SetStyle call is omitted, window simply behaves as a frame.
+		'win.AddChild(win3)
 		win3.SetStyle(,TGuiWidgetWindow.TITLE_LEFT)
 		win3.showStatusBar = False
 		'win3.clickToFront = False

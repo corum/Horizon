@@ -48,9 +48,9 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 	
 	Method Render()
 		If parent
-				SetViewport(TGuiWidgetFrame(parent).GetInnerWindowX(), TGuiWidgetFrame(parent).GetInnerWindowY(), TGuiWidgetFrame(parent).GetInnerWidth(), TGuiWidgetFrame(parent).GetInnerHeight())
+				TGuiVP.Add(TGuiWidgetFrame(parent).GetInnerWindowX(), TGuiWidgetFrame(parent).GetInnerWindowY(), TGuiWidgetFrame(parent).GetInnerWidth(), TGuiWidgetFrame(parent).GetInnerHeight())
 			Else
-				SetViewport(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
+				TGuiVP.Add(GetInnerWindowX(), GetInnerWindowY(), GetInnerWidth(), GetInnerHeight())
 		EndIf
 		If (TGuiSystem.activeElement = Self)
 			SetColor($AA,$AA,$AA)
@@ -109,7 +109,7 @@ Type TGuiWidgetTextbox Extends TGuiWidgetFrame
 			If (pos >= maxLen) Then Exit
 		Next
 		SetColor(255,255,255)
-		SetViewport(0,0,VirtualResolutionWidth(), VirtualResolutionHeight())
+		TGuiVP.Pop()
 		Super.Render()	
 	End Method
 	

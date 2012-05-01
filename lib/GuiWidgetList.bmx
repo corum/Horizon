@@ -70,10 +70,10 @@ Type TGuiWidgetList Extends TGuiWidget
 	Method Render()
 		Local oldViewportX:Int, oldViewportY:Int, oldViewportW:Int, oldViewportH:Int
 
-		oldViewportX = TGuiSystem.GetXBound()
-		oldViewportY = TGuiSystem.GetYBound()
-		oldViewportW = TGuiSystem.GetWBound()
-		oldViewportH = TGuiSystem.GetHBound()
+		oldViewportX = TGuiVP.vpX
+		oldViewportY = TGuiVP.vpY
+		oldViewportW = TGuiVP.vpW
+		oldViewportH = TGuiVP.vpH
 		UpdateScrollbar()
 		SetImageFont(font)
 		Local y:Float = rect.y - offsetY + PADDING / 2
@@ -83,10 +83,11 @@ Type TGuiWidgetList Extends TGuiWidget
 		tx = rect.x
 		ty = rect.y
 		tw = w
-		If tw > TGuiSystem.GetWBound() Then tw = TGuiSystem.GetWBound()
+		If tw > oldViewportW Then tw = oldViewportW
 		th = rect.h
-		If th + ty > TGuiSystem.GetHBound() Then th = TGuiSystem.GetHBound() - ty
-		SetViewport(tx, ty , tw, th)
+		If th + ty > oldViewportH Then th = oldViewportH - ty
+		'SetViewport(tx, ty , tw, th)
+		TGuiVP.Add(tx, ty , tw, th)
 		SetColor(0, 0, 0)
 		SetAlpha(0.4)
 		DrawRect(rect.X, rect.Y, w, rect.h)
@@ -117,7 +118,8 @@ Type TGuiWidgetList Extends TGuiWidget
 			key :+ 1
 		Next
 		'SetViewport(0, 0, VirtualResolutionWidth(), VirtualResolutionHeight())
-		SetViewport(oldViewportX, oldViewportY, oldViewportW, oldViewportH)
+		'SetViewport(oldViewportX, oldViewportY, oldViewportW, oldViewportH)
+		TGuiVP.Pop()
 	End Method
 	
 	Method GetDisplayHeight:Float()
