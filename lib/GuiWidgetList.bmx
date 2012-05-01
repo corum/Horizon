@@ -69,7 +69,6 @@ Type TGuiWidgetList Extends TGuiWidget
 	
 	Method Render()
 		Local oldViewportX:Int, oldViewportY:Int, oldViewportW:Int, oldViewportH:Int
-		Local viewportX:Int, viewportY:Int, viewportW:Int, viewportH:Int
 
 		oldViewportX = TGuiSystem.GetXBound()
 		oldViewportY = TGuiSystem.GetYBound()
@@ -81,12 +80,13 @@ Type TGuiWidgetList Extends TGuiWidget
 		Local w:Float = rect.w
 		If (scrollbar.visible) Then w:-scrollbar.rect.w
 		Local tx:Int,ty:Int,tw:Int,th:Int
-		If rect.x <= TGuiSystem.GetXBound() Then tx = TGuiSystem.GetXBound()
-		ty = TGuiSystem.GetYBound() - rect.y
-		tw = TGuiSystem.GetWBound() + w - rect.x
-		If rect.h > TGuiSystem.GetHBound() - rect.h Then th = TGuiSystem.GetWBound() - rect.h
-		'SetViewport(rect.x, rect.y, w, rect.h)
-		SetViewport(TGuiSystem.GetXBound(), TGuiSystem.GetYBound(), tw, TGuiSystem.GetHBound())
+		tx = rect.x
+		ty = rect.y
+		tw = w
+		If tw > TGuiSystem.GetWBound() Then tw = TGuiSystem.GetWBound()
+		th = rect.h
+		If th + ty > TGuiSystem.GetHBound() Then th = TGuiSystem.GetHBound() - ty
+		SetViewport(tx, ty , tw, th)
 		SetColor(0, 0, 0)
 		SetAlpha(0.4)
 		DrawRect(rect.X, rect.Y, w, rect.h)
