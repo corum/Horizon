@@ -1,4 +1,3 @@
-
 SuperStrict
 
 Import "InputControllerMouse.bmx"
@@ -20,8 +19,6 @@ Type TGuiSystem
 		TGuiVP.vpY = 0
 		TGuiVP.vpW = VirtualResolutionWidth()
 		TGuiVP.vpH = VirtualResolutionHeight()
-		SetViewport(TGuiVP.vpX, TGuiVP.vpY, TGuiVP.vpW, TGuiVP.vpH)
-		SetOrigin(0,0)
 	End Function
 		
 	Function Init()
